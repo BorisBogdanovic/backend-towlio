@@ -25,7 +25,25 @@ class CreateClientRequest extends FormRequest
     {
         return [
             'client_name' => 'required|string|max:50',
+            function ($attribute, $value, $fail) {
+                    if (preg_match('/\s/', $value)) {
+                        $fail('The '.$attribute.' cannot contain spaces.');
+                    }
+                    if (!preg_match('/^[A-Za-zČčĆćŠšĐđŽž]+$/', $value)) {
+            $fail('The '.$attribute.' can only contain letters.');
+                    }
+            },
             'client_last_name' => 'required|string|max:50',
+            function ($attribute, $value, $fail) {
+                    if (preg_match('/\s/', $value)) {
+                        $fail('The '.$attribute.' cannot contain spaces.');
+                    }
+                    if (!preg_match('/^[A-Za-zČčĆćŠšĐđŽž]+$/', $value)) {
+            $fail('The '.$attribute.' can only contain letters.');
+                    }
+            },
+
+
             'address' => 'required|string|max:255',
             'email' => 'required|email|unique:clients,email',
             'car_brand_id'=> 'required|exists:car_brands,id',
@@ -108,5 +126,22 @@ class CreateClientRequest extends FormRequest
 
         
     ];
+    }
+
+     protected function prepareForValidation()
+    {
+        
+        $this->merge([
+            'client_name' => isset($this->client_name) ? trim($this->client_name) : null,
+            'client_last_name' => isset($this->client_last_name) ? trim($this->client_last_name) : null,
+            'address'=> isset($this->address) ? trim($this->address) : null,
+            'city'=>isset($this->city) ? trim($this->city) : null,
+            'country'=>isset($this->country) ? trim($this->country) : null,
+            'email'=>isset($this->email) ? trim($this->email) : null,
+            'licence_plate' => isset($this->licence_plate) ? trim($this->licence_plate) : null,
+            'vin' => isset($this->vin) ? trim($this->vin) : null,
+            'production_year' => isset($this->production_year) ? trim($this->production_year) : null,
+            
+        ]);
     }
 }

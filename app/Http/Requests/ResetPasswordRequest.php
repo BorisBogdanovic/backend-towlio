@@ -32,7 +32,8 @@ class ResetPasswordRequest extends FormRequest
             'regex:/[a-z]/',      
             'regex:/[A-Z]/',      
             'regex:/[0-9]/',      
-            'regex:/[@$!%*#?&]/' 
+            'regex:/[@$!%*#?&]/' ,
+            'regex:/^\S*$/', 
         ],
         ];
     }
@@ -52,5 +53,11 @@ public function messages(): array
             'password.confirmed' => 'Passwords do not match.',
             'password.regex' => 'Password must include at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*#?&).',
         ];
+}
+protected function prepareForValidation(): void
+{
+    $this->merge([
+        'password' => trim($this->password),
+    ]);
 }
 }

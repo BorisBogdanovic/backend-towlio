@@ -52,4 +52,12 @@ class RegisterUserRequest extends FormRequest
             'password.regex' => 'Password must include at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*#?&).',
             ];
     }
+
+    protected function prepareForValidation()
+{
+    $this->merge([
+        'password' => trim($this->password),
+        'password_confirmation' => trim($this->password_confirmation),
+    ]);
+}
 }

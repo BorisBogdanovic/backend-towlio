@@ -41,4 +41,11 @@ class ForgotPasswordRequest extends FormRequest
 
         throw new \Illuminate\Validation\ValidationException($validator, $response);
     }
+
+protected function prepareForValidation(): void
+{
+    $this->merge([
+        'email' => trim($this->email),
+    ]);
+}
 }

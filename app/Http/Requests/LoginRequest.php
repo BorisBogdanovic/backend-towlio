@@ -37,4 +37,12 @@ class LoginRequest extends FormRequest
             'password.string' => 'The password format is invalid.',
         ];
     }
+
+    protected function prepareForValidation()
+{
+    $this->merge([
+        'email' => trim($this->email),
+        'password' => trim($this->password),
+    ]);
+}
 }
