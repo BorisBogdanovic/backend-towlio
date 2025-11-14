@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\v1\InviteController;
 use App\Http\Controllers\Api\v1\MasterDataController;
 use App\Http\Controllers\Api\v1\UserController;
 use App\Http\Controllers\Api\v1\ClientController;
+use App\Http\Controllers\Api\v1\AnalyticsController;
+
 
 Route::prefix('v1')->group(function () {
     Route::get('cities', [MasterDataController::class, 'cities']);
@@ -49,9 +51,15 @@ Route::prefix('v1')->group(function () {
         });
     });
     
-    //CLIENT ROUTES
+//CLIENT ROUTES
 Route::middleware('auth:sanctum')->prefix('client')->group(function () {
+    Route::get('/', [ClientController::class, 'getClients']);
     Route::post('/create', [ClientController::class, 'store']);
+});
+
+Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
+    Route::get('/', [AnalyticsController::class, 'getDashboardData']);
+    
 });
 });
 

@@ -19,7 +19,10 @@ class ClientResource extends JsonResource
         'client_name' => $this->client_name,
         'client_last_name' => $this->client_last_name,
         'address' => $this->address,
+        'city' => $this->city,
+        'country' => $this->country,
         'email' => $this->email,
+        'phone' => $this->phone,
         'car_brand' => [
             'id' => $this->car_brand_id,
             'name' => $this->brand->name ?? null,
@@ -31,8 +34,8 @@ class ClientResource extends JsonResource
         'production_year' => $this->production_year ?? null,
         'licence_plate' => $this->licence_plate,
         'vin' => $this->vin,
-        'start_date' => optional($this->start_date)->format('Y-m-d'),
-        'expired_date' => optional($this->expired_date)->format('Y-m-d'),
+       'start_date' => optional($this->start_date)->format('d.m.Y'),
+       'expired_date' => optional($this->expired_date)->format('d.m.Y'),
         'status' => $this->status,
         'service' => [
             'id' => $this->towlio_service_id,
@@ -41,8 +44,11 @@ class ClientResource extends JsonResource
         'sales_person' => [
             'id' => $this->sales_person_id,
             'name' => $this->salesPerson->name ?? null,
+            'last_name' => $this->salesPerson->last_name ?? null,
             'email' => $this->salesPerson->email ?? null,
+            'profile_image_path' => $this->salesPerson->profile_image_path ?? null,
         ],
+        
     ];
     }
 }

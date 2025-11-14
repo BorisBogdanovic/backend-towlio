@@ -15,20 +15,21 @@ class Client extends Model
         'client_name',
         'client_last_name',
         'address',
+        'phone',
         'email',
         'car_brand_id',    
         'car_model_id',
         'licence_plate',
         'vin',
         'start_date',
-        'expired_date',
-        'status',
         'towlio_service_id',
         'sales_person_id',
+        'expired_date',
+        'status',
         'production_year',
         'city',
         'country',
-        'phone'
+        
     ];
 
     protected $casts = [
