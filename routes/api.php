@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\v1\MasterDataController;
 use App\Http\Controllers\Api\v1\UserController;
 use App\Http\Controllers\Api\v1\ClientController;
 use App\Http\Controllers\Api\v1\AnalyticsController;
+use App\Http\Controllers\Api\V1\ChatController;
 
 
 Route::prefix('v1')->group(function () {
@@ -60,6 +61,12 @@ Route::middleware('auth:sanctum')->prefix('client')->group(function () {
 Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
     Route::get('/', [AnalyticsController::class, 'getDashboardData']);
     
+});
+//CHAT
+Route::middleware('auth:sanctum')->prefix('chat')->group(function () {
+    Route::get('/users', [ChatController::class, 'getUsers']);
+    Route::post('/send', [ChatController::class, 'sendMessage']);
+    Route::get('/messages/{contactId}', [ChatController::class, 'getMessages']);
 });
 });
 

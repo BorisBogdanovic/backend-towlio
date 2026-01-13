@@ -68,4 +68,27 @@ class User extends Authenticatable
     }
 
 
+     public function sentMessages()
+    {
+        return $this->hasMany(Message::class, 'from_id');
+    }
+    
+    public function receivedMessages()
+    {
+        return $this->hasMany(Message::class, 'to_id');
+    }
+
+     public function messagesWith($userId)
+    {
+        return Message::where(function ($q) use ($userId) {
+            $q->where('from_id', $this->id)
+              ->where('to_id', $userId);
+        })->orWhere(function ($q) use ($userId) {
+            $q->where('from_id', $userId)
+              ->where('to_id', $this->id);
+        });
+    }
+
+
+
 }
