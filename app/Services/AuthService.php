@@ -9,6 +9,8 @@ use App\Mail\ResetPasswordEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Invite;
+use App\Notifications\UserRegisteredNotification;
+
 
 
 class AuthService
@@ -163,6 +165,14 @@ public function registration(string $token, string $password, int $city): array
             'city_id'   => $city,
         ]);
 
+
+         $admin = User::role('admin')->first();
+
+         
+
+        if ($admin) {
+            $admin->notify(new UserRegisteredNotification($user));
+        }
         $invite->delete();
 
         return [

@@ -8,9 +8,13 @@ use App\Http\Controllers\Api\v1\UserController;
 use App\Http\Controllers\Api\v1\ClientController;
 use App\Http\Controllers\Api\v1\AnalyticsController;
 use App\Http\Controllers\Api\V1\ChatController;
+use Illuminate\Support\Facades\Broadcast; 
 
 
 Route::prefix('v1')->group(function () {
+
+    Broadcast::routes(['middleware' => ['auth:sanctum']]);
+
     Route::get('cities', [MasterDataController::class, 'cities']);
     Route::get('statuses', [MasterDataController::class, 'statuses']);
         Route::middleware('auth:sanctum')->group(function () {
