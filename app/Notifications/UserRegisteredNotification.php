@@ -3,9 +3,9 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Notifications\Messages\BroadcastMessage;
+use Illuminate\Notifications\Notification;
 
 class UserRegisteredNotification extends Notification implements ShouldBroadcast
 {
@@ -21,35 +21,64 @@ class UserRegisteredNotification extends Notification implements ShouldBroadcast
     /**
      * Channels
      */
-    public function via($notifiable)
+    public function via($notifiable): array
     {
         return ['database', 'broadcast'];
     }
 
     /**
-     * Data saved in DB
+     * Custom broadcast event name
      */
-    public function toDatabase($notifiable)
+    public function broadcastType(): string
+    {
+        return 'user.registered';
+    }
+
+    /**
+     * Shared notification payload
+     */
+    protected function payload(): array
     {
         return [
             'type' => 'user_registered',
-            'title' => 'New user registered',
-            'message' => "{$this->user->name} has registered successfully.",
+
+            'title' =>
+                "{$this->user->name} {$this->user->last_name}",
+
+            'message' => 'has registered successfully.',
+
             'user_id' => $this->user->id,
+
+            'sender' => [
+                'id' => $this->user->id,
+
+                'name' =>
+                    "{$this->user->name} {$this->user->last_name}",
+
+                'avatar' => $this->user->profile_image_path
+                    ? asset($this->user->profile_image_path)
+                    : null,
+            ],
+
+            'created_at' => now()->toISOString(),
         ];
+    }
+
+    /**
+     * Data saved in DB
+     */
+    public function toDatabase($notifiable): array
+    {
+        return $this->payload();
     }
 
     /**
      * Data sent in realtime
      */
-    public function toBroadcast($notifiable)
+    public function toBroadcast($notifiable): BroadcastMessage
     {
-        return new BroadcastMessage([
-            'id' => $this->id,
-            'type' => 'user_registered',
-            'title' => 'New user registered',
-            'message' => "{$this->user->name} has registered successfully.",
-            'created_at' => now()->toDateTimeString(),
-        ]);
+        return new BroadcastMessage(
+            $this->payload()
+        );
     }
 }
